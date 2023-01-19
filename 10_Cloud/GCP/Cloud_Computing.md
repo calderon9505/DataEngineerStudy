@@ -1,9 +1,9 @@
 # Qué es el cómputo en la nube?
 
 - Autoservicio y bajo demanda
-- Conectado a la red (conectado a interned)
+- Conectado a la red (conectado a internet)
 - Economías de escala (las grandes empresas compran en masa)
-- Elasticidad (Crece la infraestructua de maneta automática cuando se necesitan los recursos)
+- Elasticidad (Crece la infraestructua de manera automática cuando se necesitan los recursos)
 - Servicio medido (se cobra lo que se usa)
 
 > El computo en la nube es "una computadora enorme" de escala mundial a la cual tengo acceso, y donde GCP es el sitema operativo. (David Aroesti)

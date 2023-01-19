@@ -48,6 +48,10 @@ El modelo OSI (Open Systems Interconnection) organiza conceptualmente a las fami
 
 [Explicación Direccionamiento IPV4 y Subredes](https://www.youtube.com/watch?v=SHbBso63X38&ab_channel=GabrielMarcano)
 
+[Subneteo (Tutorial rápido) Fórmula 2^n - 2](https://www.youtube.com/watch?v=7vS9cwzn3vQ&ab_channel=LoboTecnoKu)
+
+[Subneteo (Ejemplo visual)](https://www.youtube.com/watch?v=zeoNe18V_Jo&ab_channel=LoboTecnoKu)
+
 Una dirección IP es un número de 32 bits (4 bytes). Cuando se separa en bytes y se transforma en decimal se llama *Notación Decimal Punteada*.
 
 ## Clases de direcciones IPV4
@@ -84,3 +88,53 @@ Si tenemos una red clase C (ej. 192.168.168.0), y se toman prestados 3 bits de l
 
 La última dirección de host de la subred 192.168.168.0 es 192.168.168.30, esto porque la IP 192.168.168.31 es la **dirección de difusión** (dirección de broadcast).
 
+### Direccionamiento
+
+1. Cálculo de las máscaras
+
+Cada máscara debe permitir máximo 2^n-2 hosts. n es la cantidad de bits de host. 100 hosts requiere la máscara 255.255.255.128.
+
+1. Cálculo de redes
+
+El identificador de red permite saber en qué grupo está la máquina y es la primera IP de la red. La dirección de broadcast es la última de la red.
+
+## Direcciones públicas y privadas
+
+El organismo Internet Assigned Numbers Authority (IANA) ha asignado varios rangos de direcciones para utilizar con las redes privadas. Los rangos de direcciones para utilizar con redes privadas son:
+
+* Clase A: 10.0.0.0 a 10.255.255.255 (es decir, una sola red clase A)
+* Clase B: 172.16.0.0 a 172.31.255.255 (es decir, 16 redes clase B)
+* Clase C: 192.168.0.0 a 192.168.255.255 (es decir, 256 redes clase C)
+
+Una dirección IP dentro de estos rangos se considera, por lo tanto, **no direccionable**, debido a que no es exclusiva. Cualquier red privada que necesite utilizar direcciones IP de forma interna puede utilizar cualquier dirección dentro de estos rangos sin tener que coordinarse con el IANA o un registro de Internet. Las direcciones dentro de este espacio de direcciones son solo exclusivas dentro de una determinada red privada.
+
+Todas las direcciones fuera de estos rangos se consideran públicas.
+
+# NAT (Network Address Translation)
+
+La traducción de direcciones de red, también llamado enmascaramiento de IP o NAT, es un mecanismo utilizado por routers IP para cambiar paquetes entre dos redes que asignan mutuamente direcciones incompatibles. Consiste en convertir, en tiempo real, las direcciones utilizadas en los paquetes transportados. 
+
+En palabras mías, permite conectadar redes que usan direcciones privadas (repetidas) por medio de direcciones públicas (únicas).
+
+Las NAT pueden ser Estáticas (un IP privada tiene siempre la misma IP pública), Dinámica (se tienen ciertas IP públicas y se asignan a las privadas según la que esté disponible) y sobrecarga (todas las IP privadas de un red usan la misma IP pública, así es como funciona en los hogares)
+
+# ACL (Access Control List)
+
+Permiten limitar el tráfico que va de una red a otra. Tienen sentido como una implementación física de una política de seguridad.
+
+- Las reglas se evalúan una a una en el orden en que fueron configuradas.
+- Una vez se encuentra el primer match se aplica la regla y se omiten las demás.
+- Lo anterior implica que deben construirse de lo particular a lo general.
+- Al final de toda lista existe una regla implícita de negar todo.
+
+> Todo lo que no esté explícitamente permitido, va a estar implícitamente negado.
+
+## Tipos de listas
+
+* **Estándar**: Filtra según la IP de origen. Se ubican lo más cerca posible del DESTINO del tráfico.
+* **Extendida**: Filtra de varias formas. Se ubican lo más cerca posible del ORIGEN del tráfico.
+    * IP Origen
+    * IP Destino
+    * Puerto UDP/TCP Origen
+    * Puerto UDP/TCP Destino
+    * Protocolo
