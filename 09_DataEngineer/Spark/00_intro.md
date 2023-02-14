@@ -28,9 +28,9 @@ Spark maneja arquitectura *master-slave* (**Driver-Worker**). Cuando ejecuto una
 
 Resilient Distributed Dataset. Se trata de datasets tolerantes a fallos, inmutables y capaces de operar en paralelo. los RDD son ejecutados en varias JVM en multiples servidores físicos tambien llamados **nodos**. 
 
-Es una de las dos principales estructuras que soporta Spark (Aunque realmente los RDD no poseen estrucuta estrictamente). Los RDD son el componente mínimo con el cual podemos comunicarnos con Spark. Son la principal **abstracción de datos**.
+Es una de las dos principales estructuras que soporta Spark (Aunque realmente los RDD no poseen estructura estrictamente). Los RDD son el componente mínimo con el cual podemos comunicarnos con Spark. Son la principal **abstracción de datos**.
 
-Los RDD distribuyen y particionan los datos para correr los cómputos en parelelo en varios nodos. Mientras se realizan transformaciones sobre el RDD la mayoría del tiempo no nos procupamos por el paralelismo, ya que Spark lo provee por defecto. 
+Los RDD distribuyen y particionan los datos para correr los cómputos en parelelo en varios nodos. Mientras se realizan transformaciones sobre el RDD la mayoría del tiempo no nos preocupamos por el paralelismo, ya que Spark lo provee por defecto. 
 
 La ejecución es **perezosa**. Hasta no ejecutar una acción, el código no corre. Aquí se muestran entonces las acciones y las transformaciones.
 
