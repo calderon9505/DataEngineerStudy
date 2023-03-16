@@ -3,7 +3,6 @@
 # https://danielkummer.github.io/git-flow-cheatsheet/
 # https://learngitbranching.js.org/
 
-shift + Ins                         #para pegar codigo en terminal Git bash (Insert)
 cat .gitignore                      #lista de archivos o patrones a ignorar (*.ini)
 git branch -M main                  #nombrar la rama como "main"
 git config --global alias.grafico 'log --graph --pretty=oneline -15' #git grafico
