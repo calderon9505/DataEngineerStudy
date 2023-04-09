@@ -1,6 +1,5 @@
 # https://git-scm.com/book/en/v2
 # https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
-# https://danielkummer.github.io/git-flow-cheatsheet/
 # https://learngitbranching.js.org/
 
 cat .gitignore                      #lista de archivos o patrones a ignorar (*.ini)
