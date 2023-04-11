@@ -38,8 +38,6 @@ git commit -m "commit message"
 git commit -am "commit message"     # 
 ```
 
-Cada commit me indica 
-
 
 ## Ignoring files
 
