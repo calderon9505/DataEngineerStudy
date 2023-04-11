@@ -13,19 +13,32 @@ Each file in the working directory can be in one of two states: tracked or untra
 
 ![](https://git-scm.com/book/en/v2/images/lifecycle.png)
 
+## Staging Area
+
 ```sh
 git status          # estado de los archivos
 git status -s       # estado de los archivos simplificado (--short)
 git add <file>      # pasar a estado Staged
 ```
 
-## Short Status
+### Short Status
 
 * **left-hand column** indicates the status of the **staging area**
 * **right-hand column** indicates the status of the **working tree**
 * **A** indicates new files that have been added to the staging area
 * **M** indicates files that have been modified
 * **??** indicates new files that aren’t tracked
+
+
+## Commit Area
+
+```sh
+git commit
+git commit -m "commit message"
+git commit -am "commit message"     # 
+```
+
+Cada commit me indica 
 
 
 ## Ignoring files
@@ -54,3 +67,4 @@ git diff --staged
 Compares *staging area* VS *last commit*. The result shows the changes you’ve staged that will go into your next commit. (`--staged` and `--cached` are synonyms)
 
 > Git Diff in an External Tool. `git difftool`
+
