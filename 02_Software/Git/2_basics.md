@@ -51,13 +51,6 @@ git rm <file>
 
 Al remover el archivo sin usar git será puesto en la zona **Modified**, al removerlo usando git será puesto en la zona **Staged**.
 
-## Discarding changes
-
-```sh
-git restore <file>          # to discard changes in working directory
-git restore --staged <file> # to unstage
-```
-
 
 ## Ignoring Files
 
@@ -93,18 +86,37 @@ git log -- <path/to/file> # commits that introduced changes to that file
 
 # Undoing Things
 
+## Amend commit
+
 ```sh
 git commit --amend
 ```
 
-This command takes your staging area and uses it for the commit. If you’ve made no changes since your last commit then your snapshot will look exactly the same, and all you’ll change is your commit message.
+`--amend` es un correcto del último commit, el cual adicionará lo que tenga en el **staging area** al commit. Tambien me sirve si lo que quiero es corregir el mensaje del commit. Al ejecutarlo me permite *editar* el mensaje de commit incorrecto.
+
+> Only amend commits that are still local and have not been pushed somewhere.
+
+
+## Discarding changes
+
+```sh
+git restore <file>          # to discard changes in working directory
+git restore --staged <file> # to unstage
+```
 
 
 
+# Working with Remotes
 
+A cloned repository has **origin** as the default remote server name.
 
+## Showing Your Remotes
 
-
+```sh
+git remote
+git remote -v
+git remote add <shortname> <url>
+```
 
 
 
