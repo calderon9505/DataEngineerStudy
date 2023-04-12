@@ -21,7 +21,7 @@ git status -s       # estado de los archivos simplificado (--short)
 git add <file>      # pasar a estado Staged
 ```
 
-### Short Status
+### Short status
 
 * **left-hand column** indicates the status of the **staging area**
 * **right-hand column** indicates the status of the **working tree**
@@ -35,11 +35,31 @@ git add <file>      # pasar a estado Staged
 ```sh
 git commit
 git commit -m "commit message"
+git commit -a
 git commit -am "commit message"     # 
 ```
 
+Adding the `-a` option makes Git automatically stage every file that is **already tracked** before doing the commit, letting you skip the git add part.
 
-## Ignoring files
+
+## Removing Files
+
+```sh
+rm <file>
+git rm <file>
+```
+
+Al remover el archivo sin usar git será puesto en la zona **Modified**, al removerlo usando git será puesto en la zona **Staged**.
+
+## Discarding changes
+
+```sh
+git restore <file>          # to discard changes in working directory
+git restore --staged <file> # to unstage
+```
+
+
+## Ignoring Files
 
 El archivo `.gitignore` indica a Git los archivos que no debe rastrear. The rules for the patterns you can put in the .gitignore file are as follows:
 
@@ -49,6 +69,56 @@ El archivo `.gitignore` indica a Git los archivos que no debe rastrear. The rule
 * End patterns with a forward slash (`/`) to specify a directory.
 * Negate a pattern by starting it with an exclamation point (`!`).
 * Use two asterisks to match nested directories; `a/**/z` would match a/z, a/b/z, a/b/c/z, and so on.
+
+
+
+
+
+# Viewing the Commit History
+
+```sh
+git log             # commit history
+git log -p          # shows the differences (--patch)
+git log -2          # number of log entries
+git log --stat      # statistics of logs
+git log --oneline   # checksum and commit message
+git log -- <path/to/file> # commits that introduced changes to that file
+```
+
+`git log` tiene muchas caracteristicas útile como `--pretty` que permite dar formato al historial de commits.
+
+
+
+
+
+# Undoing Things
+
+```sh
+git commit --amend
+```
+
+This command takes your staging area and uses it for the commit. If you’ve made no changes since your last commit then your snapshot will look exactly the same, and all you’ll change is your commit message.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Comparations
 
