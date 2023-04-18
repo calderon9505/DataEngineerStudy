@@ -82,3 +82,29 @@ Si tengo commits en alguna rama local que no se han subido (push) al remoto, se 
 
 > Generally it’s better to simply use the `fetch` and `merge` commands explicitly as the magic of `git pull` can often be confusing.
 
+# Rebasing
+
+With the `rebase` command, you can take all the changes that were committed on one branch and replay them on a different branch.
+
+> There are two main ways to integrate changes from one branch into another: the `merge` and the `rebase`.
+
+![](https://git-scm.com/book/en/v2/images/basic-rebase-1.png)
+
+```sh
+git checkout experiment
+git rebase master
+```
+![](https://git-scm.com/book/en/v2/images/basic-rebase-3.png)
+
+At this point, you can go back to the master branch and do a fast-forward merge.
+
+```sh
+git checkout master
+git merge experiment
+```
+
+![](https://git-scm.com/book/en/v2/images/basic-rebase-4.png)
+
+No existe diferencia en el producto final entre hacer un merge y un rebase como el explicado, más allá de tener una historia más limpia.
+
+> **Do not rebase commits that exist outside your repository and that people may have based work on.**
