@@ -11,6 +11,7 @@ git branch <branchname>         # create branch
 
 git checkout <branchname>       # switch to branch
 git checkout -b <branchname>    # create and switch
+git checkout -                  # switch to previous branch
 
 # from Git version 2.23 onwards 
 git switch <branchname>         # switch to branch

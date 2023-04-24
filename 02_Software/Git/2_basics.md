@@ -58,7 +58,7 @@ Compares *staging area* VS *last commit*. The result shows the changes you’ve 
 
 > Git Diff in an External Tool. `git difftool`
 
-
+`gitdiff` tiene formas de comparar: mi WD contra el de un commit viejo, dos commit viejos, un archivo específico ya sea de dos commits o de mi WD con otro commit. En genereal es bastante intuitivo y facil de hacer.
 
 
 ## Removing Files
