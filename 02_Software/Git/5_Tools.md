@@ -74,6 +74,14 @@ Tambien es cierto que espero nunca tener que usarlo, y por el contrario usar `ch
 Si quiero revisar el estado de los archivos de un commit específico puedo usar el `checkout`.
 
 ```sh
+git checkout <commit>           # ir a commit específico
+git checkout master             # Volver al commit más reciente de la rama
+
+git switch --detach <commit>    # ir a commit específico
+git switch -                    # Volver a donde estaba
+```
+
+```sh
 git checkout <commit>
 git checkout <commit> <file>    # Revisar archivo específico
 ```
