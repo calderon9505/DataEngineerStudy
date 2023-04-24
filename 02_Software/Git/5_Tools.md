@@ -58,4 +58,22 @@ It’s also possible to take a series of commits and squash them down into a sin
 git rebase -i HEAD~n
 ```
 
-debo dejar el commit más reciente en **pick** y los demás en **squash**
+debo dejar el commit más reciente en **pick** y los demás en **squash**, esto lo que hará es aplastar los demás commits en uno solo, conservando el mensaje del commit que tiene el pick. Si tambien quiero cambiar el mensaje de commit, debo escoger **reword**.
+
+
+## Reset
+
+En resumen, no es tan facil como creía, tampoco es que sea algo complicadísimo.
+
+no considero que sea relevante aprenderelo de momento, igual puedo repasarlo en [Reset Demystified](https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified).
+
+Tambien es cierto que espero nunca tener que usarlo, y por el contrario usar `checkout` para revisar commits anteriores.
+
+## Checkout
+
+Si quiero revisar el estado de los archivos de un commit específico puedo usar el `checkout`.
+
+```sh
+git checkout <commit>
+git checkout <commit> <file>    # Revisar archivo específico
+```
