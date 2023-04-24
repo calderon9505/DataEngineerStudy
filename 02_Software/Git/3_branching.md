@@ -25,7 +25,7 @@ git switch -                    # switch to previous branch
 
 # Merging
 
-Ubicandome sobre la rama que va a recibir los cambios (la principal), realizo el `merge` con la rama tiene los cambios.
+Ubicandome sobre la rama que va a recibir los cambios (la principal), realizo el `merge` con la rama que tiene los cambios.
 
 ```sh
 git merge <branchname>
@@ -63,8 +63,8 @@ Para cambiar nombre a una rama tanto en local como remoto
 
 ```sh
 git branch --move <old-branch-name> <new-branch-name>   # en local
-git push --set-upstream origin new-branch-name          # en remoto
-git push origin --delete old-branch-name                # la rama old remota se debe borrar manualmente
+git push --set-upstream origin <new-branch-name>        # en remoto
+git push origin --delete <old-branch-name>              # la rama old remota se debe borrar manualmente
 ```
 
 # Remote Branches
@@ -79,7 +79,7 @@ As long as you stay out of contact with your origin server, your **origin/master
 
 Al clonar un repositorio, se crea un rastreo de todas las ramas de dicho repositorio. Sin embargo, localmente solamente tengo creada la rama **master**. Al cambiarme a alguna de las ramas `git switch develop` se crea en mi repositorio local la rama **develop**, a la cual ya puedo hacerle modificaciones y queda lista para hacer `push` u `pull`.
 
-Si tengo commits en alguna rama local que no se han subido (push) al remoto, se dice que mi rama está **ahead**. Por el contrario si la rama remota tiene cambios que no he bajado (pull) al local, se dice que mi rama está **behind**. Es perfectamente posible que mi rama esté ahead y behind a la vez, por lo que debo actualizar mi rama local (merge) para que mis cambios esten al día con los últimos cambios del remoto. El número de aheads y behinds que me muestra git corresponde a la última vez que bajé cambios (bajardos con fetch, porque con pull siempre se hace merge y por tanto nunca estaría behind).
+Si tengo commits en alguna rama local que no se han subido (push) al remoto, se dice que mi rama está **ahead**. Por el contrario si la rama remota tiene cambios que no he bajado (pull) al local, se dice que mi rama está **behind**. Es perfectamente posible que mi rama esté ahead y behind a la vez, por lo que debo actualizar mi rama local (merge) para que mis cambios esten al día con los últimos cambios del remoto. El número de aheads y behinds que me muestra git corresponde a la última vez que bajé cambios (bajados con fetch, porque con pull siempre se hace merge y por tanto nunca estaría behind).
 
 > Generally it’s better to simply use the `fetch` and `merge` commands explicitly as the magic of `git pull` can often be confusing.
 

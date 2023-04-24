@@ -42,10 +42,10 @@ git stash apply             # Aplicar stash más reciente
 git stash apply stash@{n}   # aplicar stash específico
 git stash apply --index     # Lo que estaba en stage vuelve a stage
 git stash drop              # Remove a single stash entry from the list
-git stash drop  stash@{n}   # Remove a specific stash entry from the list
+git stash drop stash@{n}   # Remove a specific stash entry from the list
 git stash pop               # apply the stash and then immediately drop it
 git stash -u                # --include-untracked
-git stash branch <branch>   # create a new branach with the stash changes and drops the stash
+git stash branch <branch>   # create a new branch with the stash changes and drops the stash
 ```
 
 > You can save a stash on one branch, switch to another branch later, and try to reapply the changes.
@@ -65,7 +65,7 @@ debo dejar el commit más reciente en **pick** y los demás en **squash**, esto 
 
 En resumen, no es tan facil como creía, tampoco es que sea algo complicadísimo.
 
-no considero que sea relevante aprenderelo de momento, igual puedo repasarlo en [Reset Demystified](https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified).
+no considero que sea relevante aprenderlo de momento, igual puedo repasarlo en [Reset Demystified](https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified).
 
 Tambien es cierto que espero nunca tener que usarlo, y por el contrario usar `checkout` para revisar commits anteriores.
 

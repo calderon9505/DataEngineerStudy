@@ -36,7 +36,7 @@ git add <file>      # pasar a estado Staged
 git commit
 git commit -m "commit message"
 git commit -a
-git commit -am "commit message"     # 
+git commit -am "commit message"
 ```
 
 Adding the `-a` option makes Git automatically stage every file that is **already tracked** before doing the commit, letting you skip the git add part.
@@ -58,7 +58,7 @@ Compares *staging area* VS *last commit*. The result shows the changes you’ve 
 
 > Git Diff in an External Tool. `git difftool`
 
-`gitdiff` tiene formas de comparar: mi WD contra el de un commit viejo, dos commit viejos, un archivo específico ya sea de dos commits o de mi WD con otro commit. En genereal es bastante intuitivo y facil de hacer.
+`git diff` tiene formas de comparar: mi WD contra el de un commit viejo, dos commit viejos, un archivo específico ya sea de dos commits o de mi WD con otro commit. En genereal es bastante intuitivo y facil de hacer.
 
 
 ## Removing Files
