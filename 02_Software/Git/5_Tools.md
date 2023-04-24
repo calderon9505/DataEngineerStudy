@@ -31,7 +31,7 @@ git add -p      # --patch
 ```
 
 
-## Stashing and Cleaning
+## Stashing
 
 Stashing takes the dirty state of your working directory — that is, your modified **tracked files** and staged changes — and saves it on a stack of unfinished changes that you can reapply at any time (even on a different branch).
 
@@ -50,4 +50,12 @@ git stash branch <branch>   # create a new branach with the stash changes and dr
 
 > You can save a stash on one branch, switch to another branch later, and try to reapply the changes.
 
-probando la creacion de la rama
+## Squashing Commits
+
+It’s also possible to take a series of commits and squash them down into a single commit with the interactive rebasing tool.
+
+```sh
+git rebase -i HEAD~n
+```
+
+debo dejar el commit más reciente en **pick** y los demás en **squash**
