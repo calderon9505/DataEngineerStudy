@@ -81,7 +81,11 @@ git switch --detach <commit>    # ir a commit específico
 git switch -                    # Volver a donde estaba
 ```
 
+Ahora, puedo tambien restaurar un archivo a la forma que tenía en un commit específico
+
 ```sh
-git checkout <commit>
-git checkout <commit> <file>    # Revisar archivo específico
+git checkout <commit> <file>    # "Revisar" archivo específico
+git checkout master <file>      # Volverlo a dejar como estaba según la rama indicada
 ```
+
+No es como tal un "revisar", sino un restaurar, ya que al hacerlo el archivo me queda como estaba en el commit indicado y tambien me queda en el staging zone listo para hacer el commit. Si se trata de revisar, siempre será mejor hacer el cambio completo al commit requerido con `switch`.
