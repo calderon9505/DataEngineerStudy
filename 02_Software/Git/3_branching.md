@@ -77,7 +77,7 @@ As long as you stay out of contact with your origin server, your **origin/master
 
 ![](https://git-scm.com/book/en/v2/images/remote-branches-2.png)
 
-Al clonar un repositorio, se crea un rastreo de todas las ramas de dicho repositorio. Sin embargo, localmente solamente tengo creada la rama **master**. Al cambiarme a alguna de las ramas `git switch develop` se crea en mi repositorio local la rama **develop**, a la cual ya puedo hacerle modificaciones y queda lista para hacer `push` u `pull`.
+Al clonar un repositorio, se crea un rastreo de todas las ramas de dicho repositorio. Sin embargo, localmente solamente tengo creada la rama **master**. Al cambiarme a alguna de las ramas `git switch develop` se crea en mi repositorio local la rama **develop**, a la cual ya puedo hacerle modificaciones y queda lista para hacer `push` y `pull`.
 
 Si tengo commits en alguna rama local que no se han subido (push) al remoto, se dice que mi rama está **ahead**. Por el contrario si la rama remota tiene cambios que no he bajado (pull) al local, se dice que mi rama está **behind**. Es perfectamente posible que mi rama esté ahead y behind a la vez, por lo que debo actualizar mi rama local (merge) para que mis cambios esten al día con los últimos cambios del remoto. El número de aheads y behinds que me muestra git corresponde a la última vez que bajé cambios (bajados con fetch, porque con pull siempre se hace merge y por tanto nunca estaría behind).
 

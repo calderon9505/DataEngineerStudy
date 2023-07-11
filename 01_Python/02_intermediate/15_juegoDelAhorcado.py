@@ -12,7 +12,7 @@ def adjust(word):
 
 def run():
 
-    with open('.\\01_Python\intermediate\data.txt', 'r', encoding='utf-8') as f:
+    with open('./data.txt', 'r', encoding='utf-8') as f:
         # randomNumber = randint(0, sum(1 for _ in f))
         words = [line for line in f]
     

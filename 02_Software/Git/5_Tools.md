@@ -89,3 +89,8 @@ git checkout master <file>      # Volverlo a dejar como estaba según la rama in
 ```
 
 No es como tal un "revisar", sino un restaurar, ya que al hacerlo el archivo me queda como estaba en el commit indicado y tambien me queda en el staging zone listo para hacer el commit. Si se trata de revisar, siempre será mejor hacer el cambio completo al commit requerido con `switch`.
+
+
+# GITFLOW
+
+[Gitflow Workflow Tutorial](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow#:~:text=What%20is%20Gitflow%3F,lived%20branches%20and%20larger%20commits.)
