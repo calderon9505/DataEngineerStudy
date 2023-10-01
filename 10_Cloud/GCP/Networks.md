@@ -58,7 +58,7 @@ Una dirección IP es un número de 32 bits (4 bytes). Cuando se separa en bytes 
 
 Definen cuantos bits son de red (los primeros) y cuantos son de host (los últimos).
 
-Para determinar la clase de analiza el primer octeto (primer byte).
+Para determinar la clase se analiza el primer octeto (primer byte).
 
 | Clase | descripción | desde | hasta | cantidad de redes | cantidad de hosts | Aplicación |
 | ----- | ----------- | ----- | ----- | ----------------- | ----------------- | ---------- |
@@ -114,7 +114,7 @@ Todas las direcciones fuera de estos rangos se consideran públicas.
 
 La traducción de direcciones de red, también llamado enmascaramiento de IP o NAT, es un mecanismo utilizado por routers IP para cambiar paquetes entre dos redes que asignan mutuamente direcciones incompatibles. Consiste en convertir, en tiempo real, las direcciones utilizadas en los paquetes transportados. 
 
-En palabras mías, permite conectadar redes que usan direcciones privadas (repetidas) por medio de direcciones públicas (únicas).
+En palabras mías, permite conectar redes que usan direcciones privadas (repetidas) por medio de direcciones públicas (únicas).
 
 Las NAT pueden ser Estáticas (un IP privada tiene siempre la misma IP pública), Dinámica (se tienen ciertas IP públicas y se asignan a las privadas según la que esté disponible) y sobrecarga (todas las IP privadas de un red usan la misma IP pública, así es como funciona en los hogares)
 

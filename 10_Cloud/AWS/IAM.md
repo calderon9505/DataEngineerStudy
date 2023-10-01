@@ -16,7 +16,7 @@ Collection of users.
 
 IAM Identity with **short-term** credentials. Is similar to a user but without password or access keys.
 
-If a user is assigned to a role, access keys are created dynamically and provided to the user termporarily. That is to say, **gives up** his own permissions and instead takes on the permissions of the role.
+If a user is assigned to a role, access keys are created dynamically and provided to the user temporarily. That is to say, **gives up** his own permissions and instead takes on the permissions of the role.
 
 Se crean roles y se asignan a las distintas aplicaciones (códigos) para que tengan acceso a los recursos específicos que requiera la aplicación.
 
@@ -24,7 +24,7 @@ En términos de ADL, tengo mi usuario sebastian.calderon (con ninguna policy o a
 
 # Policy
 
-Object (JSON document) that defines permissions.
+Object (JSON document) that defines **permissions**.
 
 - effect
 - actions
@@ -34,25 +34,43 @@ Object (JSON document) that defines permissions.
 > Any actions or resources that are not explicitly allowed are denied by default
 
 ```json
-// who/what is authorized
-"Sid" : "Stmt1351674984"
-"Effect": "Allow",
-// which tasks are allowed
-"Action": [
-    "s3:DeleteObject",
-    "s3:GetObject",
-],
-// which conditions need to be met for authorization
-"Condition": {
-    "IpAddress": {
-        "aws:SourceIP": "10.14.8.0/24"
+{
+    "Version": "2012-10-17",
+    "Statement": {
+        // who/what is authorized
+        "Sid" : "Stmt1351674984"
+        "Effect": "Allow",
+        // which tasks are allowed
+        "Action": [
+            "s3:DeleteObject",
+            "s3:GetObject",
+        ],
+        // which conditions need to be met for authorization
+        "Condition": {
+            "IpAddress": {
+                "aws:SourceIP": "10.14.8.0/24"
+            }
+        }
+        // Resources to which authorized tasks are performed
+        "Resource": [
+            "arn:aws:s3:::dataeng-landing-zone/*",
+            "arn:aws:s3:::dataeng-landing-zone",
+        ]
     }
 }
-// Resources to which authorized tasks are performed
-"Resource": [
-    "arn:aws:s3:::dataeng-landing-zone/*",
-    "arn:aws:s3:::dataeng-landing-zone",
-]
+
 ```
 
-Las policys se asignan a un usuario o a un grupo.
+El campo de **Resource** he visto que tiene el siguiente orden
+
+```
+arn:aws:<service>:<region>:<account>:<resource>
+```
+
+The region portion is blank when the service is global.
+
+You can organize IAM users into IAM groups and attach a policy to a group. In that case, individual users still have their own credentials, but all the users in a group have the permissions that are attached to the group.
+
+## Identity-based and resource-based policies
+
+Identity-based policies are permissions policies that you attach to an IAM identity, such as an IAM user, group, or role. Resource-based policies are permissions policies that you attach to a resource such as an Amazon S3 bucket or an IAM role trust policy.
