@@ -52,18 +52,51 @@ Se tienen **paquetes de conformidad** que puedo implementar. Estos paquetes no s
 
 Servicio para generar informes de seguridad y conformidad
 
-
-# IAM
-
-
-
-
-
-
-
-
-
-
-----
-
 > **AWS compliance**: Requerimientos de conformidad, es decir, leyes y controles para cumplir ciertas normativas de acuerdo a las normativas de los paises
+
+# SEGURIDAD ADICIONAL
+
+## AWS Trusted Advisor
+
+Servicio que analiza el entorno AWS y proporciona recomendaciones en tiempo real para aprovisionar recursos según prácticas recomendadas. Se puede optimizar:
+* costos
+* rendimiento
+* seguridad
+* tolerancia a errores
+* cuotas de servicio
+
+Tiene características gratis (algunos de seguridad y cuotas de servicio (almacenamiento)) pero el paquete completo solo es parte del plan **AWS Support**
+
+
+## AWS WAF - Web Application Firewall
+
+Ayuda a proteger aplicaciones web contra ataques ya que monitoriza solicitudes web. 
+* filtrar direcciones IP
+* analizar encabezados HTTP
+* detectar inyección SQL
+
+
+## AWS Cognito
+
+Control de acceso a **aplicaciones web y moviles**. Permite iniciar sesión a través de terceros como Facebook, Amazon, Google o Apple.
+
+
+## AWS Shield
+
+protección contra ataques de denegación de servicios DDoS
+
+## AWS GuardDuty
+
+Escanea continuamente y detecta amenzas de forma **inteligente** en las cuentas, instancias, cargas de trabajo de contenedores, usuarios, bases de datos y almacenamiento
+
+## AWS Amazon Detective
+
+Investiga lo que ya ha pasado por medio de logs para tomar conclusiones o identificar posibles amenazas
+
+## AWS Amazon Inspector
+
+Servicio que analiza continuamente las cargas de trabajo en busca de **vulnerabilidades** de software y exposición involuntaria a la red
+
+## AWS Macie
+
+Servicio de detección y protección de datos confidenciales de S3. Además de control de acceso a los buckets

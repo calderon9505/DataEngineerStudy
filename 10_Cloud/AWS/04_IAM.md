@@ -18,6 +18,8 @@ IAM Identity with **short-term** credentials. Is similar to a user but without p
 
 If a user is assigned to a role, access keys are created dynamically and provided to the user temporarily. That is to say, **gives up** his own permissions and instead takes on the permissions of the role.
 
+A role can be assigne to a person, an aplication or a service (That is to soy, an entire ec2 machine can hace a role)
+
 Se crean roles y se asignan a las distintas aplicaciones (códigos) para que tengan acceso a los recursos específicos que requiera la aplicación.
 
 En términos de ADL, tengo mi usuario sebastian.calderon (con ninguna policy o alguna policy que desconozco). Dicho usuario tiene acceso a distintas cuentas (Data Lake account, Data Lake Stage, Data Lake Production, ASL Sandbox, etc) a las cuales puedo acceder con distintos roles (data-bbog-dataengineers-dev, data-commons-dataengineers-dev, adl-shared-access-dev)
@@ -74,3 +76,10 @@ You can organize IAM users into IAM groups and attach a policy to a group. In th
 ## Identity-based and resource-based policies
 
 Identity-based policies are permissions policies that you attach to an IAM identity, such as an IAM user, group, or role. Resource-based policies are permissions policies that you attach to a resource such as an Amazon S3 bucket or an IAM role trust policy.
+
+
+# Access
+
+* **root**: require e-mail and password
+
+* **IAM user**: require Account ID (12 digits) or account alias, IAM user name and Password
