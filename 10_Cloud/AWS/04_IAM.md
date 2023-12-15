@@ -18,11 +18,11 @@ IAM Identity with **short-term** credentials. Is similar to a user but without p
 
 If a user is assigned to a role, access keys are created dynamically and provided to the user temporarily. That is to say, **gives up** his own permissions and instead takes on the permissions of the role.
 
-A role can be assigne to a person, an aplication or a service (That is to soy, an entire ec2 machine can hace a role)
+A role can be assigne to a person, an aplication or a service (That is to say, an entire ec2 machine can have a role)
 
 Se crean roles y se asignan a las distintas aplicaciones (códigos) para que tengan acceso a los recursos específicos que requiera la aplicación.
 
-En términos de ADL, tengo mi usuario sebastian.calderon (con ninguna policy o alguna policy que desconozco). Dicho usuario tiene acceso a distintas cuentas (Data Lake account, Data Lake Stage, Data Lake Production, ASL Sandbox, etc) a las cuales puedo acceder con distintos roles (data-bbog-dataengineers-dev, data-commons-dataengineers-dev, adl-shared-access-dev)
+En términos de ADL, tengo mi usuario sebastian.calderon (con ninguna policy o alguna policy que desconozco). Dicho usuario tiene acceso a distintas cuentas (Data Lake account, Data Lake Stage, Data Lake Production, ADL Sandbox, etc) a las cuales puedo acceder con distintos roles (data-bbog-dataengineers-dev, data-commons-dataengineers-dev, adl-shared-access-dev)
 
 # Policy
 
@@ -40,7 +40,7 @@ Object (JSON document) that defines **permissions**.
     "Version": "2012-10-17",
     "Statement": {
         // who/what is authorized
-        "Sid" : "Stmt1351674984"
+        "Sid" : "Stmt1351674984",
         "Effect": "Allow",
         // which tasks are allowed
         "Action": [
@@ -52,7 +52,7 @@ Object (JSON document) that defines **permissions**.
             "IpAddress": {
                 "aws:SourceIP": "10.14.8.0/24"
             }
-        }
+        },
         // Resources to which authorized tasks are performed
         "Resource": [
             "arn:aws:s3:::dataeng-landing-zone/*",

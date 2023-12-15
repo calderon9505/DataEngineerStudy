@@ -14,7 +14,7 @@
 ## Tipos de gastos
 
 
-* **Capex** (Capital expenditures) es el costo del suministro de componente no consumibles para el sistema.
+* **Capex** (Capital expenditures) es el costo del suministro de componentes no consumibles para el sistema.
 
 * **Opex** (Operational expenditures) es el costo **permanente** para el funcionamiento del sistema (gastos de funcionamiento, gastos operativos)
 
