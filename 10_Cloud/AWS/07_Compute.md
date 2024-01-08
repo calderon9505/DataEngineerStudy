@@ -23,7 +23,7 @@ Consideraciones al lanzar una instancia EC2
 
 ## Instance purchasing options
 
-> the Saving Plans reduce the EC2 costs by making a commitment to a consistent amount of usage for a temt of 1 or 3 years.
+> the Saving Plans reduce the EC2 costs by making a commitment to a consistent amount of usage for a term of 1 or 3 years.
 
 * **On-demand Instances**: 
     * Pay by the second, with a 60-second minimum..

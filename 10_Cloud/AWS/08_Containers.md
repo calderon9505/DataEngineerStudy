@@ -1,6 +1,6 @@
 # Elastic Container Registry (ECR)
 
-Guarda imagenes de contenedores. Es igual que DockerHub administrado por AWS.
+Guarda imagenes de contenedores. Es igual que DockerHub pero administrado por AWS.
 
 
 # Elastic Container Service (ECS)
@@ -18,7 +18,7 @@ Se integra con
 * Roles de IAM
 * Elastic Load Balancing
 
-Formas de lanzas ECS
+Formas de lanzar ECS
 
 1. **Manual**: Se crea un cluster de ECS respaldado por EC2 y en él se administran los nodos(máquinas EC2, O.S., Motor Docker, etc). Es decir, administro manualmente la infraestructura.
 

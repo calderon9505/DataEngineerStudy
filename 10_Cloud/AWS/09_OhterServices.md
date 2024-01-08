@@ -36,7 +36,7 @@ Tipos de balanceadores
     * Gateway de capa 3
     * Balanceo de carga de capa 4
     
-## Auto Scaling Group
+## Auto Scaling Group (ASG)
 
 An Auto Scaling group contains a collection of EC2 instances that are treated as a logical grouping for the purposes of automatic scaling and management. An Auto Scaling group also lets you use Amazon EC2 Auto Scaling features such as **health check replacements** and **scaling policies**. Both maintaining the number of instances in an Auto Scaling group and automatic scaling are the core functionality of the Amazon EC2 Auto Scaling service.
 
