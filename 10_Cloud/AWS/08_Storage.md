@@ -127,3 +127,13 @@ Llevar datos a los servidores de AWS de forma distintas a la red. Son equipos de
 # Storage Gateway
 
 Almacenamiento para nubes híbridas.
+
+
+---
+---
+---
+
+
+# S3 Transfer Acceleration
+
+Acelerar la transferencia de contenido desde y hacia S3 para objetos grandres y a largas distancias

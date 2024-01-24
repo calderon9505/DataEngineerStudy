@@ -44,8 +44,29 @@ An Auto Scaling group contains a collection of EC2 instances that are treated as
 * Dynamic
 * Predictive
 
+
 # AWS Elastic Load Balancing (ELB)
 
 Elastic Load Balancing (ELB) automatically distributes incoming application traffic across multiple targets and virtual appliances in one or more Availability Zones (AZs).
 
 Puede funcionar con cualquiera de los tres tipos de balanceadores.
+
+
+# AWS Global accelerator
+
+Mejora la disponibilidad, rendimiento y seguridad de aplicaciones globales
+
+
+# AWS CodeCommit
+
+Es un Git implementado en la nube de AWS
+
+
+# Amazon Athena
+
+Servicio de análisis de datos a escala de petabytes con SQL o Spark. Los origenes de datos pueden ser S3, bases de datos y más.
+
+
+# Amazon QuickSight
+
+Servicio de BI serverless y nativo. Se usa ML para análisis de datos usando: lenguaje natural y/o paneles interactivos

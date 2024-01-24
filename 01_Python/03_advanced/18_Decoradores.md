@@ -23,6 +23,8 @@ def myFunc(name):
 'SEBASTIAN, RECIBISTE UN MENSAJE'
 ```
 
+Si la función recibe parámetros se pasan por medio de `*args` y `**kwargs`
+
 ```py
 from datetime import datetime
 
@@ -47,6 +49,22 @@ def suma(a,b):
 random_func()
 suma(3,5)
 ```
+
+Si el propio decorador recibe parámetros se hace así
+
+```py
+
+def execute_dynamo(parameter):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            # Code before
+            print(parameter)
+            func(*args, **kwargs)
+            # Code after
+        return wrapper
+    return decorator
+```
+
 
 # @property
 
