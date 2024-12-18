@@ -1,1 +1,9 @@
 *.pyc
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tfvars
+*.plan
+.terraform.lock.hcl
