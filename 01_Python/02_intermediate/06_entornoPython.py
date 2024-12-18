@@ -13,6 +13,7 @@ import this
 "sudo apt install python3.8-venv"       # libreria para crear venv (necesaria en wsl)
 "python3 -m venv venv"                  # creacion entorno (-m module). (se crea carpeta venv)
 "python -m venv venv"                   # creacion de venv en windows
+### REVISAR ESTA FORMA DE CREAR AMBIENTES python3.10 -m venv sample_app_venv
 #en la carpeta bin está el comando que activa el venv (en windows es "Script")
 "source venv/bin/activate"              # crear alias y llamar activate (linux)
 ".\venv\Scripts\activate"               # alias activate=.\venv\Scripts\activate (windows)

@@ -53,7 +53,7 @@ Cada subred debe estar asociada con una única tabla de enrutamiento, la cual se
 
 ### AWS Transit Gateway
 
-Cuando se tiene muchas VPCs y se quire interconectarlas
+Cuando se tienen muchas VPCs y se quiere interconectarlas
 
 
 # Security
