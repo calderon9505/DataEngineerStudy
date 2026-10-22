@@ -1,0 +1,11 @@
+companies:
+  type: pandas.CSVDataset
+  filepath: s3://data-bbog-dev-sandbox-de/learning-kedro/companies.csv
+
+reviews:
+  type: pandas.CSVDataset
+  filepath: s3://data-bbog-dev-sandbox-de/learning-kedro/reviews.csv
+
+shuttles:
+  type: pandas.ExcelDataset
+  filepath: s3://data-bbog-dev-sandbox-de/learning-kedro/shuttles.xlsx

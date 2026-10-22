@@ -1,0 +1,3 @@
+companies:
+  type: pandas.CSVDataset
+  filepath: data/00_test/companies.csv

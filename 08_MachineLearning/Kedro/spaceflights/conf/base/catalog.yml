@@ -1,0 +1,60 @@
+# Here you can define all your datasets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+
+companies:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/companies.csv
+
+reviews:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/reviews.csv
+
+shuttles:
+  type: pandas.ExcelDataset
+  filepath: data/01_raw/shuttles.xlsx
+
+preprocessed_companies:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/preprocessed_companies.parquet
+
+preprocessed_shuttles:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/preprocessed_shuttles.parquet
+
+model_input_table:
+  type: pandas.ParquetDataset
+  filepath: data/03_primary/model_input_table.parquet
+
+# active_modelling_pipeline.regressor:
+#   type: pickle.PickleDataset
+#   filepath: data/06_models/regressor_active.pickle
+#   versioned: true
+
+# candidate_modelling_pipeline.regressor:
+#   type: pickle.PickleDataset
+#   filepath: data/06_models/regressor_candidate.pickle
+#   versioned: true
+
+regressor:
+  type: kedro_mlflow.io.models.MlflowModelTrackingDataset
+  flavor: mlflow.sklearn
+  # run_id: ${runtime_params:mlflow_run_id,null}
+  save_args:
+    registered_model_name: spaceflights-regressor
+
+# la estrategia de subtypes no se puede usar con el type: MlflowModelTrackingDataset
+# porque mlflow falla al detectar que las features del modelo son diferentes para los dos modelos entrenados
+# "{subtype}_modelling_pipeline.regressor":
+#   type: pickle.PickleDataset
+#   filepath: data/06_models/regressor_{subtype}.pickle
+#   versioned: true
+
+# para cargar un modelo específico registrado en MLflow, se puede usar el 
+# model_uri con el formato "models:/<model_name>/<model_stage>"
+production_regressor:
+  type: kedro_mlflow.io.models.MlflowModelTrackingDataset
+  flavor: mlflow.sklearn
+  load_args:
+    model_uri: models:/active-spaceflights-regressor/Production

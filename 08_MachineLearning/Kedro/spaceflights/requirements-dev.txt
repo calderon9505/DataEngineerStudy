@@ -1,0 +1,4 @@
+-r requirements.txt
+kedro-viz
+kedro-docker
+notebook

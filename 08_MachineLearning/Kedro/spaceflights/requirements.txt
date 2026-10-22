@@ -1,0 +1,5 @@
+kedro==0.19.15
+kedro-datasets[pandas]
+kedro-mlflow
+scikit-learn
+s3fs
