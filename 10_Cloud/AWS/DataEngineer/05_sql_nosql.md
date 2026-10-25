@@ -154,7 +154,7 @@ Por qué importa el row vs columnar (dato clave)
 - **Columnar (OLAP)**: para "sumar una columna sobre millones de filas" solo leo esa columna → mucho menos I/O, mejor compresión. Por eso Redshift y Parquet son columnar.
 
 
-# Locks en bases de datos
+## Locks en bases de datos
 
 los locks (bloqueos) son un concepto general de bases de datos (parte de cómo los RDBMS manejan la concurrencia), no una feature específica de RDS.
 
@@ -200,3 +200,142 @@ El DEA-C01 no te va a preguntar sintaxis de LOCK ni detalles finos de locking. L
 - Las bases NoSQL (DynamoDB) evitan ese modelo de locking pesado para lograr escala horizontal; manejan concurrencia de otra forma (ej. optimistic locking con conditional writes y version numbers).
 
 Dato útil de DynamoDB (esto sí es más de examen): DynamoDB usa optimistic concurrency control — en vez de bloquear, usa conditional writes (ej. "actualiza solo si el atributo version sigue siendo X"). Si otro lo cambió antes, la escritura falla y reintentas. Es el equivalente "NoSQL" a manejar concurrencia sin locks tradicionales.
+
+
+## Comandos SQL básicos
+
+Estos son comandos estándar de SQL (aplican a Redshift, RDS, Aurora y bases relacionales en general). Se agrupan por categorías:
+
+- DML (Data Manipulation Language)
+    - INSERT: agrega filas nuevas a una tabla.
+    - SELECT: consulta/lee datos.
+    - UPDATE: modifica filas existentes.
+    - DELETE: elimina filas.
+
+- DDL (Data Definition Language)
+    - CREATE: crea objetos (tablas, vistas, esquemas).
+    - ALTER: modifica la estructura de un objeto.
+    - DROP: elimina un objeto completo.
+    - TRUNCATE: borra todas las filas de una tabla de golpe (más rápido que DELETE, no fila por fila).
+
+- DCL (Data Control Language)
+    - GRANT: otorga permisos a usuarios/grupos.
+    - REVOKE: retira permisos.
+
+- TCL (Transaction Control Language)
+    - COMMIT: confirma una transacción, haciendo permanentes los cambios.
+    - ROLLBACK: deshace los cambios de una transacción no confirmada.
+    - BEGIN: inicia una transacción.
+
+> Nota sobre transacción: conjunto de operaciones que se ejecutan como una unidad all-or-nothing (se confirma con COMMIT o se revierte con ROLLBACK). Es la base de las propiedades ACID.
+
+## JDBC y ODBC
+
+Son dos APIs estándar que permiten a las aplicaciones conectarse y comunicarse con bases de datos usando SQL. Actúan como una capa intermedia estandarizada entre tu aplicación y la base de datos.
+
+El problema que resuelven: Cada motor de base de datos tiene su propio protocolo nativo de comunicación. Sin un estándar, cada aplicación tendría que programarse específicamente para cada base. JDBC y ODBC ofrecen una interfaz común: tu aplicación habla con la API estándar, y un driver traduce esas llamadas al protocolo específico de la base. Así, cambiar de base de datos requiere cambiar el driver, no reescribir la aplicación.
+```
+Aplicación / BI tool
+│  (llamadas estándar SQL)
+▼
+Driver JDBC/ODBC   ← traduce al protocolo de la base
+│
+▼
+Base de datos (Redshift, RDS, Aurora...)
+```
+### JDBC (Java Database Connectivity)
+
+- API específica de Java (y lenguajes de la JVM).
+- Permite que aplicaciones Java ejecuten SQL contra cualquier base que tenga un driver JDBC.
+- Es la opción natural en ecosistemas Java (muchas herramientas de datos y BI están escritas en Java).
+
+### ODBC (Open Database Connectivity)
+
+- API independiente del lenguaje y la plataforma (creada por Microsoft, hoy estándar general).
+- No está atada a Java → la usan aplicaciones en C/C++, .NET, Python, herramientas de Windows, etc.
+- Más universal en términos de lenguajes.
+
+En la práctica, ambos hacen lo mismo (conectar a una base y ejecutar SQL); la elección depende del lenguaje/plataforma de la herramienta que se conecta.
+
+Lo relevante es entender que servicios como Redshift, RDS y Aurora proporcionan endpoints JDBC/ODBC como mecanismo estándar de conexión. Herramientas de BI y analytics (Tableau, Power BI, QuickSight, clientes SQL, aplicaciones) se conectan a estos servicios mediante estos drivers. Es simplemente la vía estándar de conectividad a bases de datos relacionales.
+
+## Views and Materialized Views
+
+### View — no Materialized
+
+Una view es una consulta guardada a la que le das un nombre, y que se comporta como si fuera una tabla. Pero la clave es que una view normal NO almacena
+datos — es solo la definición de la consulta guardada.
+
+- Cada vez que consultas la view, la base de datos ejecuta la query subyacente en ese momento, sobre las tablas reales.
+- Es como un "atajo" o un alias para una consulta compleja: en vez de escribir un JOIN largo cada vez, lo guardas como view y consultas `SELECT * FROM
+mi_view`.
+
+Ventajas:
+- Los datos siempre están actualizados (se calculan al vuelo sobre las tablas reales).
+- No ocupa espacio de almacenamiento (solo guarda la definición).
+- Simplifica consultas complejas y puede ocultar columnas sensibles (una forma de seguridad).
+
+Desventaja:
+- Si la consulta subyacente es pesada (joins grandes, agregaciones sobre millones de filas), la pagas cada vez que consultas la view → puede ser lento.
+
+
+### Materialized view
+
+Una materialized view resuelve justo esa desventaja: SÍ almacena físicamente el resultado de la consulta (lo "materializa" en disco).
+
+- La query pesada se ejecuta una vez (o cuando se refresca), y el resultado queda guardado.
+- Las consultas posteriores leen el resultado ya precomputado → muchísimo más rápidas, no recalculan nada.
+
+Ventaja:
+- Performance: ideal para consultas costosas que se repiten (dashboards, reportes recurrentes sobre las mismas agregaciones).
+
+Desventaja:
+- Los datos pueden quedar desactualizados (stale): como es una "foto" del momento en que se calculó, si las tablas base cambian, la vista materializada no
+lo refleja hasta que se refresca.
+- Ocupa espacio de almacenamiento (guarda los datos).
+
+#### El refresh
+
+La diferencia operativa central de una materialized view es que necesita refrescarse para actualizarse:
+- **Manual**: ejecutas un comando de refresh cuando quieras.
+- **Programado**: cada cierto tiempo.
+- **Automático**: la base lo refresca sola cuando detecta cambios (Redshift soporta auto-refresh).
+- **Incremental refresh**: en vez de recalcular todo, solo procesa los cambios desde el último refresh → mucho más eficiente (Redshift lo soporta).
+
+
+En el contexto de AWS
+
+- En Redshift, las materialized views son muy usadas para acelerar dashboards de BI y agregaciones recurrentes, con auto-refresh e incremental refresh.
+También son el destino de la streaming ingestion (Kinesis/MSK → materialized view).
+- Existen en prácticamente todas las bases relacionales (PostgreSQL, Oracle, etc.) y el concepto aparece también en Athena/otros motores analíticos.
+
+## Federated Query
+
+Una consulta federada es aquella que accede a datos que viven en fuentes de datos externas y distintas, consultándolas directamente en su ubicación original, sin tener que mover o copiar esos datos primero.
+
+Normalmente, para analizar datos de varias fuentes, tendrías que extraerlos y cargarlos todos en un mismo lugar (un proceso ETL). La consulta federada invierte eso: en vez de traer los datos hacia la consulta, lleva la consulta hacia los datos, allí donde están, y combina los resultados. El motor que ejecuta la consulta se encarga de "empujar" (push down) partes de la consulta a cada fuente, recibir los resultados parciales y combinarlos.
+
+En el contexto de AWS/Redshift, específicamente permite que Redshift consulte directamente bases de datos operacionales sin cargar sus datos al warehouse:
+
+Redshift puede consultar en vivo RDS/Aurora PostgreSQL y RDS/Aurora MySQL. Puedes hacer un JOIN en una sola query entre:
+- tablas locales de Redshift,
+- datos operacionales en RDS/Aurora (vía federated query),
+- y datos en S3 (vía Spectrum).
+
+Todo en una sola sentencia SQL, sin pipeline de por medio.
+
+> Esto es muy potente porque te permite combinar datos transaccionales frescos (lo que está ahora mismo en la base operacional) con datos históricos del warehouse, en tiempo real.
+
+Cómo funciona por debajo:
+
+Redshift empuja (query pushdown) parte del filtrado y procesamiento a la base remota, para que esta haga parte del trabajo y devuelva solo los datos
+necesarios (en vez de traer tablas enteras). Esto reduce el volumen transferido. Requiere conectividad de red (la base debe ser accesible) y credenciales, que se gestionan con AWS Secrets Manager y un IAM role.
+
+Consideraciones:
+
+- Performance: consultar una base operacional (OLTP) con cargas analíticas pesadas puede impactar su rendimiento (la base transaccional no está optimizada para scans masivos). Hay que usarlo con criterio, apoyándose en el pushdown.
+- No reemplaza al ETL para todos los casos: para análisis masivos recurrentes, sigue siendo mejor cargar los datos al warehouse.
+
+> Dato adicional: Athena también es federado
+
+> El concepto no es exclusivo de Redshift. Athena Federated Query permite a Athena consultar fuentes más allá de S3 (DynamoDB, RDS, bases externas, etc.) usando conectores basados en Lambda (data source connectors).
