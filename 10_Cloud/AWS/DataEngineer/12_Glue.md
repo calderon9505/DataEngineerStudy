@@ -117,18 +117,18 @@ Glue tiene su propia orquestación interna:
 
 Definiciones reutilizables de conexión a fuentes de datos (credenciales, parámetros de red). Permiten que los jobs/crawlers accedan a RDS, Redshift, JDBC, Kafka, etc. Para fuentes en una VPC, Glue usa estas conexiones para acceder de forma privada.
 
-## Concepto clave de costos: DPUs
+## 11. Concepto clave de costos: DPUs
 
 Glue factura su cómputo en DPUs (Data Processing Units). Una DPU es una unidad de capacidad (una combinación de CPU y memoria — 4 vCPU y 16 GB RAM). Pagas por DPU-hora mientras el job corre (facturado por segundo, con un mínimo).
 
 - Más DPUs = más paralelismo = más rápido, pero más costo.
 - Auto Scaling: Glue puede ajustar el número de workers dinámicamente según la carga del job.
 
-## Glue Flex
+## 12. Glue Flex
 
 Una opción de ejecución de menor costo para jobs no urgentes/no sensibles al tiempo (ETL batch que puede tolerar tiempos de inicio variables). Usa capacidad de cómputo "sobrante" de AWS a cambio de un precio menor. Para jobs donde la latencia de ejecución no importa.
 
-## 11. Glue Job Bookmarks ⭐
+## 13. Glue Job Bookmarks ⭐
 
 Los Job Bookmarks son un mecanismo para procesar solo datos nuevos en ejecuciones sucesivas, evitando reprocesar lo ya procesado.
 
@@ -163,7 +163,51 @@ Un pipeline de data lake clásico con Glue:
 - Cifrado con KMS, conexiones privadas vía VPC.
 - Integración nativa con S3, Redshift, RDS, DynamoDB, Kinesis, MSK, Athena, EMR.
 
+## Glue Development Endpoints 👴
 
+Desarrollar un job de ETL con Spark tiene una fricción: el código Spark que procesa datos distribuidos es difícil de escribir "de una sola vez" sin equivocarse. Si tuvieras que, por cada pequeño cambio, lanzar el job completo (que arranca un cluster, carga los datos, ejecuta todo), esperar varios minutos y ver si funcionó, el ciclo de desarrollo sería lentísimo y caro.
+
+El Development Endpoint elimina esa fricción dándote un cluster Spark ya encendido y persistente al que te conectas y
+donde pruebas tu código pieza por pieza, de forma interactiva, viendo resultados al instante. Es como tener un
+"laboratorio Spark" siempre listo mientras desarrollas.
+
+Cómo funciona:
+
+1. Provisionas el dev endpoint, indicando cuántas DPUs quieres (la capacidad de cómputo Spark).
+2. Glue levanta ese entorno Spark y lo mantiene activo.
+3. Te conectas a él desde una herramienta interactiva (un notebook, un IDE como PyCharm/VS Code, o una terminal).
+4. Escribes y ejecutas fragmentos de código (PySpark o Scala) que corren en el entorno Spark del endpoint, contra tus datos reales (ej. en S3).
+5. Iteras hasta que la lógica funciona, y entonces guardas el script como un job de Glue productivo.
+6. Importante: cuando terminas, debes eliminar el endpoint, porque mientras exista sigue facturando por DPU-hora, lo uses o no.
+
+### Apache Zeppelin
+
+Un notebook web de código abierto, nacido en el ecosistema de big data, con integración fuerte con Spark. Fue históricamente de los más usados para trabajar con Spark/Scala. Puedes correrlo localmente o en un servidor y conectarlo al dev endpoint. Soporta visualizaciones de datos integradas.
+
+### Jupyter
+
+El notebook de código abierto más popular en general, estándar de facto en Python/data science. Funciona con muchos lenguajes (el nombre viene de Julia, Python, R). En AWS, los SageMaker notebooks están basados en Jupyter, y también puedes conectarlos a un dev endpoint.
+
+> En ambos casos, el notebook es solo la interfaz donde escribes; el cómputo real (Spark) ocurre en el dev endpoint al que está conectado. El notebook manda las celdas al endpoint, el endpoint las ejecuta en Spark y devuelve el resultado.
+
+### En el contexto de AWS:
+
+- Jupyter es el más presente: los SageMaker notebooks se basan en Jupyter, y las Glue Interactive Sessions / Glue Studio notebooks usan interfaz Jupyter. Es el que más te encontrarás.
+- Zeppelin aparece sobre todo en el ecosistema EMR (donde Spark es central) y como opción histórica para conectarse a los dev endpoints de Glue. También es la base de los notebooks de Kinesis Data Analytics Studio (Flink).
+
+### La desventaja central: el modelo de costos
+
+Insisto en esto porque es lo más preguntable: un dev endpoint cobra por todo el tiempo que está provisionado, independientemente de si lo estás usando activamente. Como mantiene un cluster Spark "encendido" esperando tus comandos, cada hora cuenta. Si lo olvidas encendido un fin de semana, pagas todo ese tiempo. Por eso la recomendación es crearlo, usarlo, y eliminarlo al terminar.
+
+## Interactive Sessions
+
+Justamente por ese modelo de costos, AWS introdujo las Glue Interactive Sessions como evolución:
+- Son serverless: no mantienes un cluster provisionado permanentemente.
+- Se inician bajo demanda cuando ejecutas código y se apagan tras un tiempo de inactividad (timeout configurable).
+- Pagas solo por el tiempo real de uso, no por tenerlo encendido.
+- Se integran directamente con los notebooks de Glue Studio y con Jupyter/VS Code.
+
+Dan la misma experiencia interactiva de desarrollo pero sin el riesgo de costos de un endpoint olvidado. Por eso, en arquitecturas y exámenes modernos, las Interactive Sessions son la opción recomendada, y los dev endpoints quedan como la forma "clásica".
 
 
 # Hive y el Hive Metastore
@@ -221,3 +265,105 @@ Ahora la frase cobra sentido. Significa que el Glue Data Catalog puede funcionar
 Por qué esto importa para el examen
 
 El mensaje de fondo: el Glue Data Catalog es un Hive Metastore managed y serverless, lo que lo convierte en el catálogo universal del data lake en AWS. Esa compatibilidad es la razón técnica por la que un solo catálogo sirve a tantos servicios distintos. Cuando el examen menciona migrar un Hive Metastore, o compartir metadata entre EMR y Athena, la respuesta suele girar en torno al Glue Data Catalog.
+
+# Glue Data Catalog — profundización
+
+## Estructura completa y jerarquía
+
+El catálogo tiene más niveles de los que mencioné:
+
+- **Catalog**: el contenedor de nivel superior, uno por cuenta de AWS y por región. Se identifica por el Catalog ID, que normalmente es el ID de tu cuenta. Este detalle importa para el acceso cross-account (puedes referenciar el catálogo de otra cuenta por su Catalog ID).
+- **Databases**: agrupaciones lógicas de tablas dentro del catálogo.
+- **Tables**: las definiciones de metadata que ya vimos.
+- Connections, Crawlers, Classifiers, Schema Registry también viven dentro del catálogo.
+
+### Las tablas por dentro: 
+
+Una tabla del catálogo guarda más de lo que parece:
+
+- **Schema**: columnas, tipos de datos, comentarios.
+- **Location**: la ruta de los datos (ej. s3://...).
+- **Input/Output format y SerDe (Serializer/Deserializer)**: cómo leer/escribir el formato físico (esto viene directo del mundo Hive — el SerDe le dice al motor cómo interpretar los bytes de un CSV, JSON, Parquet, etc.).
+- **Table properties**: pares clave-valor con metadata adicional (número de filas, tamaño, parámetros de clasificación, etc.).
+- **Partition keys**: las columnas por las que está particionada.
+
+## Gestión de particiones
+
+Las particiones son uno de los puntos más relevantes del catálogo para performance, porque permiten el **partition pruning** (que Athena/Spectrum lean solo las particiones necesarias, reduciendo datos escaneados y costo).
+
+El reto: en un data lake con millones de archivos, puedes tener cientos de miles de particiones, y gestionarlas se
+vuelve un problema. Hay varias herramientas:
+
+Cómo se registran las particiones
+- **Crawlers**: detectan y registran particiones automáticamente.
+- **MSCK REPAIR TABLE** (desde Athena): escanea S3 y añade las particiones nuevas al catálogo.
+- **ALTER TABLE ADD PARTITION**: agregar particiones manualmente.
+- Los ETL jobs pueden escribir particiones y registrarlas.
+
+## Partition Indexes
+
+Cuando una tabla tiene muchísimas particiones, filtrarlas se vuelve lento (el catálogo tiene que evaluar todas). Un partition index acelera la recuperación de particiones específicas al consultar, evitando escanear toda la lista de particiones. Mejora el performance de las queries con filtros de partición sobre tablas enormes.
+
+## Partition Projection
+
+En lugar de almacenar cada partición en el catálogo, partition projection le dice a Athena cómo calcular/proyectar las particiones a partir de un patrón (ej. "las fechas van del 2020 al 2026, en formato year=YYYY/month=MM"). Athena deduce qué particiones existen sin consultarlas en el catálogo.
+
+Ventajas:
+- Elimina el cuello de botella de gestionar/consultar millones de particiones en el catálogo.
+- No necesitas crawlers ni MSCK REPAIR para mantener las particiones al día.
+- Ideal para tablas con patrones de partición predecibles y muy alta cardinalidad (sobre todo fechas).
+
+Lo veremos de nuevo en Athena, pero conceptualmente vive en la definición de la tabla del catálogo.
+
+## Schema Versioning
+
+El catálogo mantiene versiones de las definiciones de tabla. Cuando un crawler o un proceso actualiza el esquema de una tabla, se crea una nueva versión, y puedes comparar versiones y revertir a una versión anterior si un cambio rompió algo.
+
+Esto conecta con cómo el crawler maneja los cambios de esquema (schema evolution): puedes configurar qué hace cuando detecta cambios — actualizar la tabla, ignorar, o añadir columnas nuevas pero no borrar las que desaparecieron, etc. (políticas de actualización/eliminación del crawler).
+
+## Column Statistics
+
+El catálogo puede almacenar estadísticas de las tablas (número de valores distintos, nulos, min/max, etc.). Estas estadísticas las usan los motores de consulta (Athena, Redshift Spectrum) para que su optimizador de consultas (cost-based optimizer) genere mejores planes de ejecución → consultas más rápidas. Generar estadísticas es un paso de optimización que conviene conocer.
+
+## Seguridad y control de acceso
+
+El acceso al catálogo se puede controlar de tres formas, y esto es muy de examen:
+
+1. **IAM policies**: permisos sobre las acciones de Glue (glue:GetTable, etc.).
+2. **Lake Formation**: control de acceso granular (a nivel de database, tabla, columna, fila y celda) sobre los recursos del catálogo. Lake Formation se pone "encima" del Data Catalog y gestiona los permisos de forma centralizada, en vez de policies IAM dispersas. Esta es la evolución recomendada para gobernanza de data lakes.
+3. **Resource-based policies del catálogo**: policies basadas en recurso sobre el propio catálogo, usadas sobre todo para acceso cross-account.
+
+También: cifrado de la metadata en reposo con KMS, y cifrado de las connection passwords.
+
+## Acceso cross-account
+
+El catálogo se puede compartir entre cuentas (usando el Catalog ID de la otra cuenta + resource policies o Lake Formation). Esto permite arquitecturas donde una cuenta central (data lake) comparte su catálogo con cuentas consumidoras.
+
+## Soporte para formatos de data lake transaccionales
+
+Un tema moderno y creciente en el examen: el Data Catalog soporta los open table formats transaccionales:
+
+- Apache Iceberg
+- Apache Hudi
+- Delta Lake
+
+Estos formatos añaden capacidades tipo base de datos a un data lake en S3: transacciones ACID, time travel (consultar versiones históricas), upserts/deletes a nivel de registro, y schema evolution robusta. El catálogo mantiene la metadata de estas tablas para que Athena, EMR, Spectrum las consulten. Es la base del concepto "data lakehouse".
+
+## El catálogo y la federación
+
+Más recientemente, el Data Catalog puede actuar como un catálogo más amplio con federation hacia otros metastores/fuentes, y se integra con Amazon SageMaker Lakehouse y Amazon DataZone para catálogos de datos a nivel organización.
+
+## Costos
+
+El modelo de precios del catálogo es sencillo:
+- Pagas por objetos almacenados por encima del primer millón (el primer millón de objetos es gratis).
+- Pagas por requests al catálogo por encima del primer millón mensual.
+- Los crawlers y los ETL jobs se facturan aparte (por DPU-hora / tiempo de crawler), no como parte del catálogo en sí. En la práctica, el catálogo en sí es barato; lo que cuesta es el cómputo (crawlers/jobs).
+
+## Buenas prácticas que conviene recordar
+
+- No siempre necesitas crawlers: si conoces el esquema, puedes crear tablas directamente o desde los jobs → ahorras el costo del crawler y evitas que un crawler "redescubra" mal el esquema.
+- Para tablas con particiones masivas y predecibles → partition projection en lugar de registrar todas.
+- Para tablas grandes con muchas particiones que sí registras → partition indexes.
+- Genera column statistics para acelerar consultas en Athena/Spectrum.
+- Usa Lake Formation para gobernanza granular en lugar de solo IAM.
