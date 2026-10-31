@@ -125,6 +125,13 @@ Un concepto práctico: Lake Formation permite un modo híbrido donde una ubicaci
 - Todo el acceso mediado por Lake Formation queda registrado (integración con CloudTrail) → auditoría de quién accedió a qué.
 - Centraliza la gestión, reduciendo el riesgo de exposiciones accidentales por policies mal configuradas.
 
+## Governed Tables (deprecated)
+
+Tipo especial de tabla de Lake Formation que añadía capacidades de base de datos transaccional a datos en S3 — transacciones ACID (lecturas/escrituras concurrentes consistentes), automatic compaction  (combina archivos pequeños para resolver el "small files problem"), time travel (consultar versiones históricas) y row-level security integrada.
+
+Han sido efectivamente superadas y ya no son la opción recomendada; AWS adoptó los **open table formats** (sobre todo Apache Iceberg, también Hudi y Delta Lake), que ofrecen las mismas capacidades (ACID, time travel, compaction, upserts/deletes a nivel de registro) pero de forma abierta, portable e interoperable entre motores (Athena, Glue, EMR, Redshift, Spark). Por tanto, si un escenario pide ACID / upserts / time travel en un data lake sobre S3, la respuesta moderna es Iceberg, no Governed Tables.
+
+
 ---
 ---
 
