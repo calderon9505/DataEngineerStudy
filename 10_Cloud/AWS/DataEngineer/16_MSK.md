@@ -71,8 +71,8 @@ Red:
 ### MSK Connect
 
 Servicio managed para ejecutar Kafka Connect, el framework de Kafka para mover datos desde y hacia sistemas externos sin escribir código, mediante conectores:
-- Source connectors: traen datos a Kafka (desde bases de datos con CDC, como Debezium, desde archivos, etc.).
-- Sink connectors: llevan datos de Kafka a destinos (S3, Redshift, OpenSearch, bases de datos, etc.).
+- **Source connectors**: traen datos a Kafka (desde bases de datos con CDC, como Debezium, desde archivos, etc.).
+- **Sink connectors**: llevan datos de Kafka a destinos (S3, Redshift, OpenSearch, bases de datos, etc.).
 
 Es el equivalente a lo que Firehose hace por Kinesis. MSK no tiene un "Firehose" propio, pero tiene MSK Connect.
 
